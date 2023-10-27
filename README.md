@@ -1,7 +1,7 @@
 Requirments
     All file transfers are completed over ssh, therefore you will have to have root ssh enables in order to transfer files. 
     To enable root ssh on your pwnagotchi
-        ssh into your pwnagotchi
+    ssh into your pwnagotchi
         sudo su
         passwd root
         'yourpassword'
