@@ -46,4 +46,3 @@ Setup Pwnagotchi
     upload config.toml file from local machine
 
   
-    upload config.toml to /etc/pwnagotchi
