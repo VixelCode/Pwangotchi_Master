@@ -162,7 +162,7 @@ def pwnagotchi_interactions():
 
 # Defining Backup Files
 def pwnagotchi_backup():
-    print("1 - Backup brain.nn & brain.json \n" "2 - Backup config.toml")
+    print("1 - Backup brain.nn & brain.json \n" "2 - Backup config.toml \n" "3 - Back")
 
     bkfl_choice = input("Enter choice : ")
     
@@ -212,7 +212,7 @@ def pwnagotchi_backup():
 
 # Defining pwnagotchi setup
 def pwnagotchi_setup():
-    print("1 - Move config.toml file \n" "0 - Exit")
+    print("1 - Move config.toml file \n" "0 - Back")
 
     stup_choice = input("Enter your choice : ")
     
