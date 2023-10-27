@@ -11,7 +11,7 @@ To enable root ssh on your pwnagotchi, first ssh into your pwnagotchi
     sudo nano /etc/ssh/sshd_config
     find the line that says '#PermitRootLogin prohibit-password'
     change it to say 'PermitRootLogin yes'
-        service ssh restart
+    service ssh restart
 
 Intructions 
     
