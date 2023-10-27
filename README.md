@@ -3,8 +3,8 @@ Simple Python3 program I put together to make interactions with a pwnagotchi eas
 Requirments
 All file transfers are completed over ssh, therefore you will have to have root ssh enables in order to transfer files. 
     
-    To enable root ssh on your pwnagotchi
-    ssh into your pwnagotchi
+To enable root ssh on your pwnagotchi, first ssh into your pwnagotchi
+
     sudo su
     passwd root
     'yourpassword'
@@ -41,8 +41,68 @@ Backup Files
 - Backup AI
     download brain.nn & brain.json files from pwnagotchi to backup folder
         
+- Backup config        service ssh restart
+
+Intructions 
+    
+    cd /path/to/Pwnagotchi_Master
+    chmod +x loot
+    chmod +x backup
+    sudo python3 Pwnagotchi_Master.py
+
+Menu
+   
+Pwnagotchi interactions
+        
+- SSH into pwnagotchi
+    creates a ssh connection to your pwnagotchi
+        
+- Download handshakes
+    downloads all files from pwnagotchi's handshakes folder to loot folder
+        
+- Erase handshakes
+    erases all files in pwnagotchi's handshakes folder
+        
+- Download pwnlog
+    download pwnagotchi's pwnagotchi.log file to backup folder
+    
+Backup Files
+        
+- Backup AI
+    download brain.nn & brain.json files from pwnagotchi to backup folder
+        
 - Backup config
     download config.toml file from pwnagotchi to backup folder
 
 - Pwnagotchi Setup
+    upload config.toml to /etc/pwnagotchi
+        service ssh restart
+
+Intructions 
+    
+    cd /path/to/Pwnagotchi_Master
+    chmod +x loot
+    chmod +x backup
+    sudo python3 Pwnagotchi_Master.py
+
+Menu
+   
+Pwnagotchi interactions        
+- SSH into pwnagotchi
+    creates a ssh connection to your pwnagotchi     
+- Download handshakes
+    downloads all files from pwnagotchi's handshakes folder to loot folder     
+- Erase handshakes
+    erases all files in pwnagotchi's handshakes folder     
+- Download pwnlog
+    download pwnagotchi's pwnagotchi.log file to backup folder 
+
+Backup Files        
+- Backup AI
+    download brain.nn & brain.json files from pwnagotchi to backup folder
+- Backup config
+    download config.toml file from pwnagotchi to backup folder
+
+Pwnagotchi Setup
+- Place config.toml onto pwnagotchi
     upload config.toml to /etc/pwnagotchi
