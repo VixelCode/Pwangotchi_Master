@@ -134,7 +134,7 @@ def pwnagotchi_interactions():
             # Erasing Files
             for file in files:
                 sftp.remove(server_path + file)
-            print("Erased handshakes from pwnagotchi completed \n")
+            print("Erased handshakes from pwnagotchi \n")
             ssh.close()
             pwnagotchi_interactions()
 
@@ -152,7 +152,7 @@ def pwnagotchi_interactions():
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "pwnagotchi.log")
         print("Downloaded pwnagotchi log \n")
-        ssh.close
+        ssh.close()
         pwnagotchi_interactions()
 
     if inter_choice == 0:
@@ -180,12 +180,12 @@ def pwnagotchi_backup():
         server_path = str('/' + '/root/brain.nn')
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "brain.nn")
-        
+       
         # Download brain.json file
         server_path = str('/' + '/root/brain.json')
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "brain.json")
-        print("Brain.nn & Brain.json downloaded \n")
+        print("brain.nn & brain.json downloaded \n")
         ssh.close()
         pwnagotchi_backup()
 
