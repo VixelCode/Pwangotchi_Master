@@ -16,7 +16,8 @@ Requirments
 Intructions 
     
     cd /path/to/Pwnagotchi_Master
-    sudo bash setup.sh
+    chmod +x loot
+    chmod +x backup
     sudo python3 Pwnagotchi_Master.py
 
 Menu
