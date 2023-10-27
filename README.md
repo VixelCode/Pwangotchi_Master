@@ -12,7 +12,7 @@ Requirments
 
 Intructions 
     cd /path/to/Pwnagotchi_Master
-    
+    sudo bash setup.sh
     sudo python3 Pwnagotchi_Master.py
 
 Menu
@@ -40,13 +40,3 @@ Menu
 
     Pwnagotchi Setup
         upload config.toml
-
-    
-
-
-To do for v1.0
-    CLEAN UP CODE
-    Timeouts for ssh to go Backup to Menu
-    Seperate good from bad handshakes
-    Combine all good handshakes in single file
-    Hashcat combined handshake file
