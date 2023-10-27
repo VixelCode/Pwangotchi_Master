@@ -20,27 +20,28 @@ Intructions
     sudo python3 Pwnagotchi_Master.py
 
 Menu
+   
     Pwnagotchi interactions
         
-        SSH into pwnagotchi
-            creates a ssh connection to your pwnagotchi
+    SSH into pwnagotchi
+        creates a ssh connection to your pwnagotchi
         
-        Download handshakes
-            downloads all files from pwnagotchi's handshakes folder to loot folder
+    Download handshakes
+        downloads all files from pwnagotchi's handshakes folder to loot folder
         
-        Erase handshakes
-            erases all files in pwnagotchi's handshakes folder
+    Erase handshakes
+         erases all files in pwnagotchi's handshakes folder
         
-        Download pwnlog
-            download pwnagotchi's pwnagotchi.log file to backup folder
+    Download pwnlog
+        download pwnagotchi's pwnagotchi.log file to backup folder
     
     Backup Files
         
-        Backup AI
-            download brain.nn & brain.json files from pwnagotchi to backup folder
+    Backup AI
+        download brain.nn & brain.json files from pwnagotchi to backup folder
         
-        Backup config
-            download config.toml file from pwnagotchi to backup folder
+    Backup config
+        download config.toml file from pwnagotchi to backup folder
 
     Pwnagotchi Setup
-        upload config.toml
+        upload config.toml to /etc/pwnagotchi
