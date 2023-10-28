@@ -24,25 +24,23 @@ Menu
    
 Pwnagotchi Interactions
         
-- SSH into pwnagotchi
-    creates a ssh connection to your pwnagotchi       
-- Download handshakes
-    downloads all files from pwnagotchi's handshakes folder to loot folder        
-- Erase handshakes
-    erases all files in pwnagotchi's handshakes folder        
-- Download pwnlog
-    download pwnagotchi's pwnagotchi.log file to backup folder
+- SSH into pwnagotchi       
+- Download handshakes        
+- Erase handshakes   
     
 Backup Files
         
 - Backup AI
     download brain.nn & brain.json files from pwnagotchi to backup folder
 - Backup config.toml
-    download config.toml file from pwnagotchi
+- Download pwnagotchi.log file
 
 Setup Pwnagotchi
 
 - Upload config.toml
-    upload config.toml file from local machine
 
+Handshake Interactions
+
+Seperate valid handshakes 
+- Seperates pcap files with valid handshakes using hcxpcapngtool
   
