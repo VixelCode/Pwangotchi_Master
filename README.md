@@ -40,7 +40,6 @@ Setup Pwnagotchi
 - Upload config.toml
 
 Handshake Interactions
-
-Seperate valid handshakes 
+ 
 - Seperates pcap files with valid handshakes using hcxpcapngtool
   
