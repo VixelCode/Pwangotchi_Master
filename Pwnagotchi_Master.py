@@ -88,7 +88,7 @@ username = pwn_uname
 
 # Defining pwnagotchi Interactions
 def pwnagotchi_interactions():
-    print("1 - SSH into pwnagotchi \n""2 - Download all pcap files \n" "3 - Erase all handshakes on pwnagotchi \n" "4 - Download pwnagotchi log \n" "0 - Back")
+    print("1 - SSH into pwnagotchi \n""2 - Download all pcap files \n" "3 - Erase all handshakes on pwnagotchi \n" "0 - Back")
 
     inter_choice = input("Enter choice : ")
     
