@@ -51,24 +51,35 @@ import time
 
 
 
-
 # Fancy things
 print(" ____ _    _ _  _   __   ___ _____ ____ ___ _   _ ____    __  __   __   ___ ____ ____ ____ \n"
 "(  _ ( \/\/ | \( ) /__\ / __|  _  |_  _) __| )_( |_  _)  (  \/  ) /__\ / __|_  _| ___|  _ \ \n"
 " )___/)    ( )  ( /(__)( (_-.)(_)(  )(( (__ ) _ ( _)(_    )    ( /(__)\\__ \ )(  )__) )   / \n"
 "(__) (__/\__|_)\_|__)(__)___(_____)(__)\___|_) (_|____)  (_/\/\_|__)(__|___/(__)(____|_)\_) \n")
 
-# Setting bash script variables
-ssh_bash = 'Scripts/test.sh'
-
-# Getting local username
+# Getting local machine variables
 local_user = os.getlogin()
+local_path = os.getcwd()
 
-# Setting loot path directories
-loot_path = ('/home/' + str(local_user) + '/Pwnagotchi_Master/loot/')
-backups = ('/home/' + str(local_user) + '/Pwnagotchi_Master/backups/')
+# Setting bash script variables
+ssh_bash = (local_path + '/Scripts/ssh.sh')
+seperate_bash = (local_path +'/Scripts/seperate.sh')
+hashcat_bash = (local_path + '/Scripts/hashcat.sh')
 
- 
+
+# Setting path directories on local machine
+loot_path = (local_path + '/loot/')
+backups = (local_path + '/backups/')
+hash_file = (local_path + '/combinded.hc22000')
+cracked_file = (local_path + '/loot/cracked.txt')
+whitelist = (local_path + '/whitelist.txt')
+
+print()
+
+# Setting path directories on pwnagotchi
+pwn_handshake = '/root/handshakes/'
+pwn_config = '/etc/pwnagotchi/config.toml'
+
 # Redefining settings
 ip = pwn_ip
 username = pwn_uname
@@ -83,14 +94,13 @@ def pwnagotchi_interactions():
     
     inter_choice = int(inter_choice)
 
-    if inter_choice == 1:
+    if inter_choice == 1: # SSH into pwnagotchi
         subprocess.call(ssh_bash, shell=True)
         pwnagotchi_interactions()
-        ssh.close()
 
-    if inter_choice == 2:
+    if inter_choice == 2: # Download all pcap files
         password =input('Please enter your pwnagotchi password - ')
-        server_path = str('/' + '/root/handshakes/')
+        server_path = pwn_handshake
         
          # Creating SSH connection
         ssh = paramiko.SSHClient() 
@@ -107,12 +117,11 @@ def pwnagotchi_interactions():
         for file in files:
             sftp.get(server_path + file, loot_path + file)
         print("Download completed \n")
-        ssh.close()
         pwnagotchi_interactions()
 
-    if inter_choice == 3:
+    if inter_choice == 3: # Delete all handshakes on pwnagotchi
         password =input('Please enter your pwnagotchi password - ')
-        server_path = str('/' + '/root/handshakes/')
+        server_path = pwn_handshake
 
         print("WARNING YOUR ABOUT TO DELETE ALL HANDSHAKES ON PWNAGOTCHI - Please type yes to confirm : ")
 
@@ -135,25 +144,7 @@ def pwnagotchi_interactions():
             for file in files:
                 sftp.remove(server_path + file)
             print("Erased handshakes from pwnagotchi \n")
-            ssh.close()
             pwnagotchi_interactions()
-
-
-    if inter_choice == 4:
-        # Creating SSH connection
-        password =input('Please enter your pwnagotchi password - ')
-        ssh = paramiko.SSHClient() 
-        ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
-        ssh.connect(ip, username=username, password=password)
-        print("Connection Succesful \n")
-        
-        # Download pwnagotchi file
-        server_path = str('/' + '/var/log/pwnagotchi.log')
-        sftp = ssh.open_sftp()
-        sftp.get(server_path, str(backups) + "pwnagotchi.log")
-        print("Downloaded pwnagotchi log \n")
-        ssh.close()
-        pwnagotchi_interactions()
 
     if inter_choice == 0:
         main()
@@ -162,13 +153,13 @@ def pwnagotchi_interactions():
 
 # Defining Backup Files
 def pwnagotchi_backup():
-    print("1 - Backup brain.nn & brain.json \n" "2 - Backup config.toml \n" "3 - Back")
+    print("1 - Backup brain.nn & brain.json \n" "2 - Backup config.toml \n" "3 - Download pwnagotchi.log \n" "0 - Back")
 
     bkfl_choice = input("Enter choice : ")
     
     bkfl_choice = int(bkfl_choice)
 
-    if bkfl_choice == 1:
+    if bkfl_choice == 1: # Backup brain.nn and brain.json
         # Creating SSH connection
         password =input('Please enter your pwnagotchi password - ')
         ssh = paramiko.SSHClient() 
@@ -186,10 +177,12 @@ def pwnagotchi_backup():
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "brain.json")
         print("brain.nn & brain.json downloaded \n")
-        ssh.close()
         pwnagotchi_backup()
 
-    if bkfl_choice == 2:
+    if bkfl_choice == 2: # Download config.toml
+
+        server_path = pwn_config
+
         # Creating SSH connection
         password =input('Please enter your pwnagotchi password - ')
         ssh = paramiko.SSHClient() 
@@ -198,12 +191,28 @@ def pwnagotchi_backup():
         print("Connection Succesful \n")
         
         # Download config.toml file
-        server_path = str('/' + '/etc/pwnagotchi/config.toml')
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "config.toml")
         print("Downloaded config.toml \n")
-        ssh.close()
         pwnagotchi_backup()
+    
+    if bkfl_choice == 3: # Download pwnagotchi.log
+
+        server_path = pwn_config
+        
+        # Creating SSH connection
+        password =input('Please enter your pwnagotchi password - ')
+        ssh = paramiko.SSHClient() 
+        ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
+        ssh.connect(ip, username=username, password=password)
+        print("Connection Succesful \n")
+        
+        # Download pwnagotchi file
+        sftp = ssh.open_sftp()
+        sftp.get(server_path, str(backups) + "pwnagotchi.log")
+        print("Downloaded pwnagotchi log \n")
+        pwnagotchi_interactions()
+    
 
     if bkfl_choice == 0:
         main()
@@ -219,6 +228,9 @@ def pwnagotchi_setup():
     stup_choice = int(stup_choice)
 
     if stup_choice == 1:
+        
+        server_path = pwn_config
+
         # Creating SSH connection
         password =input('Please enter your pwnagotchi password - ')
         ssh = paramiko.SSHClient() 
@@ -227,13 +239,11 @@ def pwnagotchi_setup():
         print("Connection Succesful \n")
         
         # Uploading config.toml file
-        server_path = ('/etc/pwnagotchi/' + str('test.toml'))
         config_toml = input("EXAMPLE - /home/user/config/toml \n " "Enter full path to your config.toml file - ")
         print("\n")
         sftp = ssh.open_sftp()
         sftp.put(config_toml, server_path)
         print("Uploaded config.toml \n")
-        ssh.close()
         pwnagotchi_setup()
 
     if stup_choice == 0:
@@ -241,9 +251,34 @@ def pwnagotchi_setup():
 
 ################################################################################################################################
 
+def handshake_interactions():
+    print("1 - Seperate valid handshakes \n" "2 - Hashcat combined.txt \n" "3 - Whitelist networks with valid handshakes \n" "0 - Back")
+    
+    hndske_choice = input("Enter choice : ")
+    
+    hndske_choice = int(hndske_choice)
+    
+    if hndske_choice == 1: # Seperating pcap files with good handshakes
+        subprocess.call(['bash', seperate_bash, loot_path])
+        #subprocess.call(seperate_bash, shell=True)
+        print("Seperated valid handshake files \n")
+
+    if hndske_choice == 2: # Hashcat combinded.txt
+        print("Coming soon!")
+        handshake_interactions()       
+            
+            
+    if hndske_choice == 3:
+        print("Coming soon!")
+        handshake_interactions()
+
+    if handshake_interactions == 0:
+        print("Coming soon!")
+        handshake_interactions()
+
 # Main Menu
 def main():
-    print("1 - Pwnagotchi Interactions \n" "2 - Backup Files \n" "3 - Pwnagotchi Setup \n" "0 - Exit \n")
+    print("1 - Pwnagotchi Interactions \n" "2 - Backup Files \n" "3 - Pwnagotchi Setup \n" "4 - Handshake Interactions \n" "0 - Exit \n")
 
     choice = input("Enter choice : ")
 
@@ -260,8 +295,12 @@ def main():
     if choice == 3:
         pwnagotchi_setup()
 
+    if choice == 4:
+        handshake_interactions()
+
     if choice == 0:
         print("Exiting \n")
         exit
 
 main()
+
