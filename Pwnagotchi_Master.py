@@ -1,5 +1,5 @@
 #################################################### Pwnagotchi Master #########################################################
-###################################################### By - Ghxst_ #############################################################
+###################################################### By - VixelCode ##########################################################
 
 # Simple python3 proggram to make interactions with your pwnagotchi easier. This is the first program I have written so the code itself could probably be improved, but hey I'm learning and this is an accomplishment for me. If you have any suggestions or input on how to improve any of the coding please feel free to reach out to me on github! I'm always trying to learn new things.
 
