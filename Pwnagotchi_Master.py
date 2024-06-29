@@ -1,7 +1,7 @@
 #################################################### Pwnagotchi Master #########################################################
 ###################################################### By - Ghxst_ #############################################################
 
-# Simple python3 proggram to make interactions with your pwnagotchi easier. This is the first program I have written so the code itself could probably be improved, but hey I'm learning and this is an accomplishment for me. 
+# Simple python3 proggram to make interactions with your pwnagotchi easier. This is the first program I have written so the code itself could probably be improved, but hey I'm learning and this is an accomplishment for me. If you have any suggestions or input on how to improve any of the coding please feel free to reach out to me on github! I'm always trying to learn new things.
 
 
 
@@ -26,7 +26,7 @@ pwn_uname = 'root'
 
 
 
-# This could be very easily changed into a way to download, upload, and erase files from a remote server via a shh connection
+
 
 
 # Importing modules needed for program
@@ -36,6 +36,9 @@ import paramiko
 import sys
 import logging
 import time
+import logging
+from datetime import date
+
 
 
 
@@ -60,21 +63,24 @@ print(" ____ _    _ _  _   __   ___ _____ ____ ___ _   _ ____    __  __   __   _
 # Getting local machine variables
 local_user = os.getlogin()
 local_path = os.getcwd()
+date = date.today()
 
 # Setting bash script variables
-ssh_bash = (local_path + '/Scripts/ssh.sh')
-seperate_bash = (local_path +'/Scripts/seperate.sh')
-hashcat_bash = (local_path + '/Scripts/hashcat.sh')
-
+seperate_bash = (local_path +'/scripts/seperate.sh')
+ssh_bash = (local_path + '/scripts/ssh.sh')
+combine_bash = (local_path + '/scripts/combine.sh')
 
 # Setting path directories on local machine
 loot_path = (local_path + '/loot/')
+hashcat_loot = (loot_path + 'hashcat/')
 backups = (local_path + '/backups/')
-hash_file = (local_path + '/combinded.hc22000')
-cracked_file = (local_path + '/loot/cracked.txt')
-whitelist = (local_path + '/whitelist.txt')
 
-print()
+# Hashcat setting
+run_hashcat = f'hashcat -m22000'
+wordlist = '/usr/share/wordlists/rockyou.txt'
+
+# Setting default answer
+default_answer = 'y'
 
 # Setting path directories on pwnagotchi
 pwn_handshake = '/root/handshakes/'
@@ -83,6 +89,11 @@ pwn_config = '/etc/pwnagotchi/config.toml'
 # Redefining settings
 ip = pwn_ip
 username = pwn_uname
+
+################################################################################################################################
+
+# Logging information
+logging.basicConfig(filename='logs.log', level=logging.INFO)
 
 ################################################################################################################################
 
@@ -99,14 +110,14 @@ def pwnagotchi_interactions():
         pwnagotchi_interactions()
 
     if inter_choice == 2: # Download all pcap files
-        password =input('Please enter your pwnagotchi password - ')
+        password =input('Please enter your pwnagotchi password : ')
         server_path = pwn_handshake
         
          # Creating SSH connection
         ssh = paramiko.SSHClient() 
         ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
         ssh.connect(ip, username=username, password=password)
-        print("Connection Successfull \n")
+        print("Connection Successful \n")
 
         # Open sftp and get file in requested folder
         sftp = ssh.open_sftp()
@@ -117,23 +128,24 @@ def pwnagotchi_interactions():
         for file in files:
             sftp.get(server_path + file, loot_path + file)
         print("Download completed \n")
+        logging.info(f' Handshakes downloaded {date}')
         pwnagotchi_interactions()
 
     if inter_choice == 3: # Delete all handshakes on pwnagotchi
-        password =input('Please enter your pwnagotchi password - ')
+        password = input('Please enter your pwnagotchi password : ')
         server_path = pwn_handshake
 
-        print("WARNING YOUR ABOUT TO DELETE ALL HANDSHAKES ON PWNAGOTCHI - Please type yes to confirm : ")
+        print("WARNING YOUR ABOUT TO DELETE ALL HANDSHAKES ON PWNAGOTCHI - Type y to confirm : ")
 
         response = str(input())
 
-        if response == str("yes"):
+        if response == default_answer:
 
             # Creating SSH connection
             ssh = paramiko.SSHClient() 
             ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
             ssh.connect(ip, username=username, password=password)
-            print("Connection Successfull \n")
+            print("Connection Successful \n")
 
             # Open sftp and get file in requested folder
             sftp = ssh.open_sftp()
@@ -144,10 +156,14 @@ def pwnagotchi_interactions():
             for file in files:
                 sftp.remove(server_path + file)
             print("Erased handshakes from pwnagotchi \n")
+            logging.info(f' Erased handhakes from pwnagotchi {date}')
             pwnagotchi_interactions()
 
     if inter_choice == 0:
         main()
+
+    elif inter_choice != 1-3:
+        pwnagotchi_interactions()
 
 ################################################################################################################################
 
@@ -161,7 +177,7 @@ def pwnagotchi_backup():
 
     if bkfl_choice == 1: # Backup brain.nn and brain.json
         # Creating SSH connection
-        password =input('Please enter your pwnagotchi password - ')
+        password =input('Please enter your pwnagotchi password : ')
         ssh = paramiko.SSHClient() 
         ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
         ssh.connect(ip, username=username, password=password)
@@ -177,6 +193,7 @@ def pwnagotchi_backup():
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "brain.json")
         print("brain.nn & brain.json downloaded \n")
+        logging.info(f' Downloaded brain.nn & brain.josn {date}')
         pwnagotchi_backup()
 
     if bkfl_choice == 2: # Download config.toml
@@ -184,7 +201,7 @@ def pwnagotchi_backup():
         server_path = pwn_config
 
         # Creating SSH connection
-        password =input('Please enter your pwnagotchi password - ')
+        password =input('Please enter your pwnagotchi password : ')
         ssh = paramiko.SSHClient() 
         ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
         ssh.connect(ip, username=username, password=password)
@@ -194,6 +211,7 @@ def pwnagotchi_backup():
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "config.toml")
         print("Downloaded config.toml \n")
+        logging.info(f' Downoaded config.toml {date}')
         pwnagotchi_backup()
     
     if bkfl_choice == 3: # Download pwnagotchi.log
@@ -201,7 +219,7 @@ def pwnagotchi_backup():
         server_path = pwn_config
         
         # Creating SSH connection
-        password =input('Please enter your pwnagotchi password - ')
+        password =input('Please enter your pwnagotchi password : ')
         ssh = paramiko.SSHClient() 
         ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
         ssh.connect(ip, username=username, password=password)
@@ -211,17 +229,19 @@ def pwnagotchi_backup():
         sftp = ssh.open_sftp()
         sftp.get(server_path, str(backups) + "pwnagotchi.log")
         print("Downloaded pwnagotchi log \n")
-        pwnagotchi_interactions()
+        logging.info(f' Pwnagotchi.log downloaded {date}')
+        pwnagotchi_backup()
     
-
     if bkfl_choice == 0:
         main()
 
+    elif bkfl_choice != 1-3:
+        pwnagotchi_backup()
 ################################################################################################################################
 
 # Defining pwnagotchi setup
 def pwnagotchi_setup():
-    print("1 - Move config.toml file \n" "0 - Back")
+    print("1 - Upload backup config.toml file \n" "0 - Back")
 
     stup_choice = input("Enter your choice : ")
     
@@ -232,27 +252,30 @@ def pwnagotchi_setup():
         server_path = pwn_config
 
         # Creating SSH connection
-        password =input('Please enter your pwnagotchi password - ')
+        password =input('Please enter your pwnagotchi password : ')
         ssh = paramiko.SSHClient() 
         ssh.load_host_keys(os.path.expanduser(os.path.join('~', '.ssh', 'known_hosts')))
         ssh.connect(ip, username=username, password=password)
         print("Connection Succesful \n")
         
         # Uploading config.toml file
-        config_toml = input("EXAMPLE - /home/user/config/toml \n " "Enter full path to your config.toml file - ")
+        config_toml = backups + 'config.toml'
         print("\n")
         sftp = ssh.open_sftp()
         sftp.put(config_toml, server_path)
         print("Uploaded config.toml \n")
+        logging.info(f'config.toml file uploaded {date}')
         pwnagotchi_setup()
 
     if stup_choice == 0:
         main()
 
+    elif stup_choice != 1:
+        pwnagotchi_setup()
 ################################################################################################################################
 
 def handshake_interactions():
-    print("1 - Seperate valid handshakes \n" "2 - Hashcat combined.txt \n" "3 - Whitelist networks with valid handshakes \n" "0 - Back")
+    print("1 - Seperate valid handshakes \n" "2 - Hashcat \n" "3 - Copy and paste to whitelist \n" "0 - Back")
     
     hndske_choice = input("Enter choice : ")
     
@@ -260,21 +283,50 @@ def handshake_interactions():
     
     if hndske_choice == 1: # Seperating pcap files with good handshakes
         subprocess.call(['bash', seperate_bash, loot_path])
-        #subprocess.call(seperate_bash, shell=True)
+        subprocess.call(['bash', combine_bash, hashcat_loot])
+        logging.info(f' Seperated valid handshakes {date}')
         print("Seperated valid handshake files \n")
-
-    if hndske_choice == 2: # Hashcat combinded.txt
-        print("Coming soon!")
-        handshake_interactions()       
-            
-            
-    if hndske_choice == 3:
-        print("Coming soon!")
         handshake_interactions()
 
-    if handshake_interactions == 0:
-        print("Coming soon!")
+
+    if hndske_choice == 2: # List files in the hashcat folder and asking for user input for which one to run hashcat against
+        valid_hashcat = os.listdir(hashcat_loot)
+        hashcat_log = valid_hashcat.index('hashcat.log')
+        valid_hashcat.pop(hashcat_log)
+        for handshake in valid_hashcat:
+            print(f'{valid_hashcat.index(handshake)} : {handshake}')      
+        hashcat_file = int(input("Select a network : "))
+        hashcat_file_name = valid_hashcat[hashcat_file]
+        os.system(f'{run_hashcat} {hashcat_loot}{hashcat_file_name} {wordlist}')
+    
+    if hndske_choice == 3: # Copy and paste for whitelist on pwnagotchi
+        print("Below network names are all the networks you have a valid handshake for ready to pasted into your config.toml file. \n")
+        valid_handshakes = os.listdir(hashcat_loot)
+        if len(valid_handshakes) == 0:
+            print("No valid handshakes, get out there and capture some! \n")
+            handshake_interactions()
+        if "combined.hc22000" in valid_handshakes :
+            valid_handshakes.remove("combined.hc22000")
+        if "hashcat.log" in valid_handshakes :
+            valid_handshakes.remove("hashcat.log")
+        if valid_handshakes == 0 : 
+            print("No valid handshakes, get out there and capture some! \n")
+        for file in valid_handshakes :
+            split_hndske = ()
+            split_hndske = file.split("_")
+            if len(split_hndske) ==2:
+                split_hndske.pop(1)
+            for file in split_hndske :
+                print('"' + file + '",')
+        print("\n")
+    
+    if hndske_choice == 0:
+        main()
+
+    elif hndske_choice != 1-3:
         handshake_interactions()
+
+################################################################################################################################
 
 # Main Menu
 def main():
@@ -299,8 +351,9 @@ def main():
         handshake_interactions()
 
     if choice == 0:
-        print("Exiting \n")
-        exit
-
+        print("Happy Hunting! \n")
+        exit()
+    elif choice != 1-4:
+        main()
 main()
 
