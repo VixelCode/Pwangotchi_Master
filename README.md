@@ -19,6 +19,7 @@ Intructions
     
     cd /path/to/Pwnagotchi_Master
     sudo bash setup.sh
+    sudo python3 Penagotchi_Master.py
 
 Menu
    
