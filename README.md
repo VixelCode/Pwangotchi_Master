@@ -1,7 +1,9 @@
-Simple Python3 program I put together to make interactions with a pwnagotchi easier. This is the first program I have written so please have patience as issues arise and I work on fixing them. 
+Simple Python3 program I put together to make interactions with a pwnagotchi easier. This is the first program I have written so please have patience as issues arise and I work on fixing them. If you have any suggestions, or just input on how to make the code more efficient please feel free to let me know!
+
 
 Requirments
 All file transfers are completed over ssh, therefore you will have to have root ssh enables in order to transfer files. 
+Currently only tested on kali VM
     
 To enable root ssh on your pwnagotchi, first ssh into your pwnagotchi
 
@@ -16,17 +18,15 @@ To enable root ssh on your pwnagotchi, first ssh into your pwnagotchi
 Intructions 
     
     cd /path/to/Pwnagotchi_Master
-    chmod +x loot
-    chmod +x backup
-    sudo python3 Pwnagotchi_Master.py
+    sudo bash setup.sh
 
 Menu
    
 Pwnagotchi Interactions
         
 - SSH into pwnagotchi       
-- Download handshakes        
-- Erase handshakes   
+- Download handshakes from pwnagotchi       
+- Erase handshakes from pwnagotchi
     
 Backup Files
         
@@ -42,4 +42,6 @@ Setup Pwnagotchi
 Handshake Interactions
  
 - Seperates pcap files with valid handshakes using hcxpcapngtool
+- Select from list of files to run hashcat on
+- Prints in terminal a copy and paste string of all networks you have a valid handshake for to be pasted into your pwnagotchi's config.toml file.
   
